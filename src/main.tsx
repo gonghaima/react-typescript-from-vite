@@ -1,14 +1,30 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { BrowserRouter } from 'react-router-dom';
+import { Security } from '@okta/okta-react';
+import { OktaAuth, toRelativeUrl } from '@okta/okta-auth-js';
 import App from './App';
 import './index.css';
 
+const oktaAuth = new OktaAuth({
+  issuer: `https://{yourOktaDomain}/oauth2/default`,
+  clientId: '{yourClientID}',
+  redirectUri: `${window.location.origin}/callback`,
+});
+
+function restoreOriginalUri(oktaAuth: OktaAuth, originalUri: string) {
+  window.location.replace(
+    toRelativeUrl(originalUri || '/', window.location.origin)
+  );
+}
+
 ReactDOM.render(
   <React.StrictMode>
-    <BrowserRouter>
-      <App />
-    </BrowserRouter>
+    <Security oktaAuth={oktaAuth} restoreOriginalUri={restoreOriginalUri}>
+      <BrowserRouter>
+        <App />
+      </BrowserRouter>
+    </Security>
   </React.StrictMode>,
   document.getElementById('root')
 );

@@ -1,5 +1,6 @@
 import './App.css';
 import { BrowserRouter, Link, Route, Switch } from 'react-router-dom';
+import { LoginCallback, SecureRoute } from '@okta/okta-react';
 import Home from './components/Home';
 import Converter from './components/Converter';
 
@@ -15,7 +16,8 @@ function App() {
         </nav>
         <Switch>
           <Route exact path="/" component={Home} />
-          <Route path="/converter" component={Converter} />
+          <SecureRoute path="/converter" component={Converter} />
+          <Route path="/callback" component={LoginCallback} />
         </Switch>
       </BrowserRouter>
     </div>
